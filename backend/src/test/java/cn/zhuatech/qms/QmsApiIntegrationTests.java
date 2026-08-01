@@ -34,5 +34,13 @@ class QmsApiIntegrationTests {
                 .andExpect(jsonPath("$.data.materialCode").value("MAT-TEST-01"))
                 .andExpect(jsonPath("$.data.status").value("待检验"));
     }
+    @Test void adminCanRecommendTightenedSamplingPlan() throws Exception {
+        mvc.perform(post("/api/qms/sampling-plan").header("Authorization","Bearer "+login())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"materialCode\":\"MAT-RISK-01\",\"lotSize\":10000,\"historicalDefectRate\":0.03,\"supplierRisk\":80,\"criticalCharacteristic\":true,\"recentEscapes\":2}"))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.data.sampleSize").value(594))
+            .andExpect(jsonPath("$.data.inspectionLevel").value("TIGHTENED"))
+            .andExpect(jsonPath("$.data.acceptanceNumber").value(0));
+    }
     @Test void anonymousRequestIsDenied() throws Exception {mvc.perform(get("/api/qms/dashboard")).andExpect(status().isForbidden());}
 }
