@@ -1,0 +1,52 @@
+[
+  {
+    "patch": {},
+    "expected": {
+      "decision": "PASS",
+      "sampledPct": "#8",
+      "observedDefectPct": "#2.5"
+    },
+    "error": false
+  },
+  {
+    "patch": {
+      "defective": "3"
+    },
+    "expected": {
+      "decision": "REVIEW"
+    },
+    "error": false
+  },
+  {
+    "patch": {
+      "defective": "4"
+    },
+    "expected": {
+      "decision": "HOLD"
+    },
+    "error": false
+  },
+  {
+    "patch": {
+      "samplingComplete": "NO"
+    },
+    "expected": {
+      "decision": "HOLD"
+    },
+    "error": false
+  },
+  {
+    "patch": {
+      "acceptNumber": "4"
+    },
+    "expected": {},
+    "error": true
+  },
+  {
+    "patch": {
+      "sampleQty": "1001"
+    },
+    "expected": {},
+    "error": true
+  }
+]
