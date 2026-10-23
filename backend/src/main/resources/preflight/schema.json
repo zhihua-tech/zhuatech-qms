@@ -1,0 +1,86 @@
+{
+  "slug": "qms",
+  "title": "检验批次合格数量平衡预检",
+  "fields": [
+    {
+      "key": "inspection_no",
+      "label": "检验单",
+      "type": "ID",
+      "length": 200
+    },
+    {
+      "key": "lot",
+      "label": "批次",
+      "type": "ID",
+      "length": 200
+    },
+    {
+      "key": "sampled",
+      "label": "抽样数量",
+      "type": "INTEGER",
+      "length": 200,
+      "scale": 0
+    },
+    {
+      "key": "accepted",
+      "label": "合格数量",
+      "type": "INTEGER",
+      "length": 200,
+      "scale": 0
+    },
+    {
+      "key": "rejected",
+      "label": "不合格数量",
+      "type": "INTEGER",
+      "length": 200,
+      "scale": 0
+    },
+    {
+      "key": "ncr",
+      "label": "不合格报告数",
+      "type": "INTEGER",
+      "length": 200,
+      "scale": 0
+    }
+  ],
+  "unique": [
+    [
+      "inspection_no"
+    ]
+  ],
+  "rules": [
+    {
+      "op": "SUM_EQ",
+      "args": [
+        "accepted",
+        "rejected",
+        "sampled"
+      ],
+      "code": "SAMPLE_BALANCE",
+      "message": "合格与不合格之和必须等于抽样数量",
+      "bad": {
+        "accepted": "96"
+      }
+    },
+    {
+      "op": "LE",
+      "args": [
+        "ncr",
+        "rejected"
+      ],
+      "code": "NCR_COUNT",
+      "message": "不合格报告数不能超过不合格件数",
+      "bad": {
+        "ncr": "6"
+      }
+    }
+  ],
+  "sampleCsv": "inspection_no,lot,sampled,accepted,rejected,ncr\nQC-001,LOT-01,100,95,5,1\n",
+  "limits": {
+    "rows": 500,
+    "bytes": 262144,
+    "columns": 32,
+    "cellCharacters": 4000
+  },
+  "scope": "Read-only batch validation; no persistence, reference-master lookup or full production certification."
+}
